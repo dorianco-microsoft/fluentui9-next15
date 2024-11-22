@@ -1,0 +1,28 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fluentui/react-components": "^9.56.2",
+    "@fluentui/react-icons": "^2.0.265",
+    "fluentui-next-appdir-directive": "^0.1.7",
+    "next": "15.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@7.26.1+sha512.97ce99372f116661b6683c59564ebebedf5cf1a574b4c648090c4f92c45038be6bda7f769206886ae61215467e2cd98f245b1b4862a9b2f80e178d68892ec95b"
+}

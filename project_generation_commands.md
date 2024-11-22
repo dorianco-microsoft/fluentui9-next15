@@ -1,0 +1,458 @@
+## Commands Used for Generating the Next Project
+---
+### Environment Details
+
+| Property           | Value                                     |
+| ------------------ | ----------------------------------------- |
+| Date               | `11/21/2024 (MM/dd/yyyy)`                 |
+| Operating System   | `Windows 11 Pro 24H2 Build 26100.2454`    |
+| Command Line       | `PowerShell (Core) v7.4.6`                |
+| NodeJS Version     | `v20.17.0`                                |
+| NPM Version        | `10.9.0`                                  |
+| NPX Version        | `10.9.0`                                  |
+| Microsoft Edge     | `131.0.2903.63 (Official build) (64-bit)` | 
+
+---
+
+### Project Generation Commands
+
+#### Generate a Next Project 
+https://nextjs.org/docs/app/getting-started/installation#automatic-installation
+```ps1
+npx create-next-app@latest
+# Need to install the following packages:
+# create-next-app@15.0.3
+# Ok to proceed? (y) y
+#
+# √ What is your project named? ... my-app
+# √ Would you like to use TypeScript? ... No / (Yes)
+# √ Would you like to use ESLint? ... No / (Yes)
+# √ Would you like to use Tailwind CSS? ... No / (Yes)
+# √ Would you like your code inside a `src/` directory? ... No / (Yes)
+# √ Would you like to use App Router? (recommended) ... No / (Yes)
+# √ Would you like to use Turbopack for next dev? ... No / (Yes)
+# √ Would you like to customize the import alias (@/* by default)? ... No / (Yes)
+# √ What import alias would you like configured? ... @/*
+# Creating a new Next.js app in C:\Repos\FluentUI(v9.56.2)-Next(v15.0.3)\my-app.
+#
+# Using npm.
+#
+# Initializing project with template: app
+#
+#
+# Installing dependencies:
+# - react
+# - react-dom
+# - next
+#
+# Installing devDependencies:
+# - typescript
+# - @types/node
+# - @types/react
+# - @types/react-dom
+# - eslint
+# - eslint-config-next
+#
+# added 297 packages, and audited 298 packages in 48s
+#
+# 118 packages are looking for funding
+#   run `npm fund` for details
+#
+# found 0 vulnerabilities
+# Initialized a git repository.
+#
+# Success! Created my-app at C:\Repos\FluentUI(v9.56.2)-Next(v15.0.3)\my-app
+```
+
+#### Change Directory to the Project
+```ps1
+cd .\my-app
+```
+
+#### Install Fluent UI 9 dependencies
+https://react.fluentui.dev/?path=/docs/concepts-developer-server-side-rendering-next-js-appdir-setup--docs#nextjs13-appdir-router
+
+```ps1
+npm install --save @fluentui/react-components @fluentui/react-icons fluentui-next-appdir-directive
+# npm error code ERESOLVE
+# npm error ERESOLVE unable to resolve dependency tree
+# npm error
+# npm error While resolving: my-app@0.1.0
+# npm error Found: react@19.0.0-rc-66855b96-20241106
+# npm error node_modules/react
+# npm error   react@"19.0.0-rc-66855b96-20241106" from the root project
+# npm error
+# npm error Could not resolve dependency:
+# npm error peer react@">=16.14.0 <19.0.0" from @fluentui/react-components@9.56.2
+# npm error node_modules/@fluentui/react-components
+# npm error   @fluentui/react-components@"*" from the root project
+# npm error
+# npm error Fix the upstream dependency conflict, or retry
+# npm error this command with --force or --legacy-peer-deps
+# npm error to accept an incorrect (and potentially broken) dependency resolution.
+# npm error
+# npm error
+# npm error For a full report see:
+# npm error C:\Users\dorianco\AppData\Local\npm-cache\_logs\2024-11-22T03_30_50_726Z-eresolve-report.txt
+# npm error A complete log of this run can be found in: C:\Users\dorianco\AppData\Local\npm-cache\_logs\2024-11-22T03_30_50_726Z-debug-0.log
+```
+
+The error above is because NextJS `15.0.3` uses React `19.0.0-rc-66855b96-20241106`, and Fluent UI `9.56.2` requires React `>=16.14.0 <19.0.0`. This is how the `package.json` `dependencies` section looked like:
+```json
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "next": "15.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3"
+  }
+}
+```
+
+To resolve this, I had to change the version of React to lastest stable `^18.3.1`.
+
+```jsonc
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "react": "^18.3.1",     // updated this
+    "react-dom": "^18.3.1", // and also this
+    "next": "15.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3"
+  }
+}
+```
+
+Then I deleted the `node_modules` folder and the `package-lock.json` generated by the previous install, and ran the `npm install` again.
+
+Now we can  install the Fluent UI 9 dependencies as suggested in https://react.fluentui.dev/?path=/docs/concepts-developer-server-side-rendering-next-js-appdir-setup--docs#nextjs13-appdir-router
+
+```ps1
+npm install --save @fluentui/react-components @fluentui/react-icons fluentui-next-appdir-directive
+# added 120 packages, and audited 418 packages in 26s
+
+# 118 packages are looking for funding
+#   run `npm fund` for details
+
+# found 0 vulnerabilities
+```
+
+It worked!
+
+#### Validating NextJS is not broken after changing React version
+```ps1
+npm run dev
+
+# > my-app@0.1.0 dev
+# > next dev --turbopack
+
+#    ▲ Next.js 15.0.3 (Turbopack)
+#    - Local:        http://localhost:3000
+
+#  ✓ Starting...
+#  ✓ Ready in 1025ms
+```
+Sample app seems to continue working as expected.
+
+#### Applying Configuration for Fluent UI 9
+I followed step by step what is mentioned in your documentation https://react.fluentui.dev/?path=/docs/concepts-developer-server-side-rendering-next-js-appdir-setup--docs
+Full error log after command.
+```ps1
+npm run dev
+
+# > my-app@0.1.0 dev
+# > next dev --turbopack
+
+#    ▲ Next.js 15.0.3 (Turbopack)
+#    - Local:        http://localhost:3000
+#    - Experiments (use with caution):
+#      · swcPlugins
+
+#  ✓ Starting...
+#  ✓ Ready in 1021ms
+#  ○ Compiling / ...
+# thread '<unnamed>' panicked at /home/estebanmu-dev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rkyv-0.7.44/src/impls/core/mod.rs:266:67:
+# called `Result::unwrap()` on an `Err` value: LayoutError
+# note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+#  ✓ Compiled / in 1032ms
+#  ○ Compiling /_error ...
+#  ⨯ ./node_modules/next/dist/esm/build/templates/pages.js:3:1
+# Module not found: Can't resolve 'next/dist/esm/build/templates/helpers'
+# failed to analyse ecmascript module '[project]/node_modules/next/dist/esm/build/templates/helpers.js [ssr] (ecmascript)'
+
+# Caused by:
+# - failed to parse [project]/node_modules/next/dist/esm/build/templates/helpers.js
+# - Transforming and/or parsing of [project]/node_modules/next/dist/esm/build/templates/helpers.js failed
+# - failed to run Wasm plugin transform. Please ensure the version of `swc_core` used by the plugin is compatible with the host runtime. See the documentation for compatibility information. If you are an author of the plugin, please update `swc_core` to the compatible version.
+# - RuntimeError: out of bounds memory access
+
+# Debug info:
+# - Execution of <ModuleAssetContext as AssetContext>::process_resolve_result failed
+# - Execution of apply_module_type failed
+# - Execution of *EcmascriptExports::needs_facade failed
+# - Execution of <EcmascriptModuleAsset as EcmascriptChunkPlaceable>::get_exports failed
+# - Execution of analyse_ecmascript_module failed
+# - failed to analyse ecmascript module '[project]/node_modules/next/dist/esm/build/templates/helpers.js [ssr] (ecmascript)'
+# - Execution of <EcmascriptModuleAsset as EcmascriptParsable>::failsafe_parse failed
+# - Execution of parse failed
+# - failed to parse [project]/node_modules/next/dist/esm/build/templates/helpers.js
+# - Transforming and/or parsing of [project]/node_modules/next/dist/esm/build/templates/helpers.js failed
+# - failed to run Wasm plugin transform. Please ensure the version of `swc_core` used by the plugin is compatible with the host runtime. See the documentation for compatibility information. If you are an author of the plugin, please update `swc_core` to the compatible version.
+
+#                   Note that if you want to use the os features like filesystem, you need to use `wasi`. Wasm itself does not have concept of filesystem.
+
+#                   https://swc.rs/docs/plugin/selecting-swc-core
+
+#                   See https://plugins.swc.rs/versions/from-plugin-runner/4.0.0 for the list of the compatible versions.
+
+#                   Build info:
+#                       Date: 2024-11-07
+#                       Timestamp: 2024-11-07T09:55:40.203904400Z
+
+#                   Version info:
+#                       swc_plugin_runner: 4.0.0
+#                       Dependencies: anyhow 1.0.93,codspeed-criterion-compat 2.7.2,criterion 0.5.1,enumset 1.1.5,futures 0.3.31,once_cell 1.20.2,parking_lot 0.12.3,serde 1.0.214,serde_json 1.0.132,swc_atoms 2.0.0,swc_common 4.0.0,swc_css_ast 4.0.1,swc_css_parser 4.0.0,swc_ecma_ast 4.0.1,swc_ecma_loader 4.0.0,swc_ecma_parser 5.0.0,swc_ecma_visit 4.0.0,swc_malloc 1.0.0,swc_plugin_proxy 4.0.0,testing 4.0.0,tokio 1.41.0,tracing 0.1.40,vergen 9.0.1,virtual-fs 0.16.0,wasmer 4.3.7,wasmer-cache 4.3.7,wasmer-compiler-cranelift 4.3.7,wasmer-wasix 0.27.0
+
+# - RuntimeError: out of bounds memory access
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x41293)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x412d6)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x412d6)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_common::plugin::serialized::_::<impl rkyv::Deserialize<swc_common::plugin::serialized::VersionedSerializable<T>,__D> for <swc_common::plugin::serialized::VersionedSerializable<T> as rkyv::Archive>::Archived>::deserialize::hf9f5382e5cfe68e1 (fluentui_next_appdir_directive.wasm[1034]:0x1415b6)
+#       at swc_common::plugin::serialized::PluginSerializedBytes::deserialize::h1117c4582490e330 (fluentui_next_appdir_directive.wasm[1035]:0x1417db)
+#       at __transform_plugin_process_impl (fluentui_next_appdir_directive.wasm[900]:0x130928)
+#       at __transform_plugin_process_impl.command_export (fluentui_next_appdir_directive.wasm[1960]:0x1ba3df)
+# Import map: aliased to module "next" with subpath "/dist/esm/build/templates/helpers" inside of [project]/
+
+
+# https://nextjs.org/docs/messages/module-not-found
+
+
+#  ⨯ ./node_modules/next/dist/esm/build/templates/pages.js:3:1
+# Module not found: Can't resolve 'next/dist/esm/build/templates/helpers'
+# failed to analyse ecmascript module '[project]/node_modules/next/dist/esm/build/templates/helpers.js [ssr] (ecmascript)'
+
+# Caused by:
+# - failed to parse [project]/node_modules/next/dist/esm/build/templates/helpers.js
+# - Transforming and/or parsing of [project]/node_modules/next/dist/esm/build/templates/helpers.js failed
+# - failed to run Wasm plugin transform. Please ensure the version of `swc_core` used by the plugin is compatible with the host runtime. See the documentation for compatibility information. If you are an author of the plugin, please update `swc_core` to the compatible version.
+# - RuntimeError: out of bounds memory access
+
+# Debug info:
+# - Execution of <ModuleAssetContext as AssetContext>::process_resolve_result failed
+# - Execution of apply_module_type failed
+# - Execution of *EcmascriptExports::needs_facade failed
+# - Execution of <EcmascriptModuleAsset as EcmascriptChunkPlaceable>::get_exports failed
+# - Execution of analyse_ecmascript_module failed
+# - failed to analyse ecmascript module '[project]/node_modules/next/dist/esm/build/templates/helpers.js [ssr] (ecmascript)'
+# - Execution of <EcmascriptModuleAsset as EcmascriptParsable>::failsafe_parse failed
+# - Execution of parse failed
+# - failed to parse [project]/node_modules/next/dist/esm/build/templates/helpers.js
+# - Transforming and/or parsing of [project]/node_modules/next/dist/esm/build/templates/helpers.js failed
+# - failed to run Wasm plugin transform. Please ensure the version of `swc_core` used by the plugin is compatible with the host runtime. See the documentation for compatibility information. If you are an author of the plugin, please update `swc_core` to the compatible version.
+
+#                   Note that if you want to use the os features like filesystem, you need to use `wasi`. Wasm itself does not have concept of filesystem.
+
+#                   https://swc.rs/docs/plugin/selecting-swc-core
+
+#                   See https://plugins.swc.rs/versions/from-plugin-runner/4.0.0 for the list of the compatible versions.
+
+#                   Build info:
+#                       Date: 2024-11-07
+#                       Timestamp: 2024-11-07T09:55:40.203904400Z
+
+#                   Version info:
+#                       swc_plugin_runner: 4.0.0
+#                       Dependencies: anyhow 1.0.93,codspeed-criterion-compat 2.7.2,criterion 0.5.1,enumset 1.1.5,futures 0.3.31,once_cell 1.20.2,parking_lot 0.12.3,serde 1.0.214,serde_json 1.0.132,swc_atoms 2.0.0,swc_common 4.0.0,swc_css_ast 4.0.1,swc_css_parser 4.0.0,swc_ecma_ast 4.0.1,swc_ecma_loader 4.0.0,swc_ecma_parser 5.0.0,swc_ecma_visit 4.0.0,swc_malloc 1.0.0,swc_plugin_proxy 4.0.0,testing 4.0.0,tokio 1.41.0,tracing 0.1.40,vergen 9.0.1,virtual-fs 0.16.0,wasmer 4.3.7,wasmer-cache 4.3.7,wasmer-compiler-cranelift 4.3.7,wasmer-wasix 0.27.0
+
+# - RuntimeError: out of bounds memory access
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x41293)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x412d6)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x412d6)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_common::plugin::serialized::_::<impl rkyv::Deserialize<swc_common::plugin::serialized::VersionedSerializable<T>,__D> for <swc_common::plugin::serialized::VersionedSerializable<T> as rkyv::Archive>::Archived>::deserialize::hf9f5382e5cfe68e1 (fluentui_next_appdir_directive.wasm[1034]:0x1415b6)
+#       at swc_common::plugin::serialized::PluginSerializedBytes::deserialize::h1117c4582490e330 (fluentui_next_appdir_directive.wasm[1035]:0x1417db)
+#       at __transform_plugin_process_impl (fluentui_next_appdir_directive.wasm[900]:0x130928)
+#       at __transform_plugin_process_impl.command_export (fluentui_next_appdir_directive.wasm[1960]:0x1ba3df)
+# Import map: aliased to module "next" with subpath "/dist/esm/build/templates/helpers" inside of [project]/
+
+
+# https://nextjs.org/docs/messages/module-not-found
+
+
+#  ✓ Compiled /_error in 1089ms
+#  ⨯ Error: Cannot find module 'next/dist/esm/build/templates/helpers'
+#     at <unknown> (C:\Repos\FluentUI(v9.56.2)-Next(v15.0.3)\my-app\.next\server\chunks\ssr\node_modules_94f0ee._.js:4998:15)
+#     at [project]/node_modules/next/dist/esm/build/templates/pages.js { INNER_PAGE => "[project]/node_modules/next/error.js [ssr] (ecmascript)", INNER_DOCUMENT => "[project]/node_modules/next/document.js [ssr] (ecmascript)", INNER_APP => "[project]/node_modules/next/app.js [ssr] (ecmascript)" } [ssr] (ecmascript) (C:\Repos\FluentUI(v9.56.2)-Next(v15.0.3)\my-app\.next\server\chunks\ssr\node_modules_94f0ee._.js:5001:3)
+#     at instantiateModule (C:\Repos\FluentUI(v9.56.2)-Next(v15.0.3)\my-app\.next\server\chunks\ssr\[turbopack]_runtime.js:589:23)
+#     at instantiateRuntimeModule (C:\Repos\FluentUI(v9.56.2)-Next(v15.0.3)\my-app\.next\server\chunks\ssr\[turbopack]_runtime.js:652:12)
+#     at Object.getOrInstantiateRuntimeModule (C:\Repos\FluentUI(v9.56.2)-Next(v15.0.3)\my-app\.next\server\chunks\ssr\[turbopack]_runtime.js:668:12)
+#     at Object.<anonymous> (C:\Repos\FluentUI(v9.56.2)-Next(v15.0.3)\my-app\.next\server\pages\_error.js:5:26)
+#     at call (node_modules\next\src\server\require-hook.ts:70:25)
+#     at require (node_modules\next\src\server\require.ts:121:8)
+#     at page (node_modules\next\src\server\load-components.ts:189:41)
+#     at async DevServer.findPageComponentsImpl (node_modules\next\src\server\next-server.ts:779:27)
+#     at async DevServer.findPageComponents (node_modules\next\src\server\dev\next-dev-server.ts:881:13)
+#     at async DevServer.renderErrorToResponseImpl (node_modules\next\src\server\base-server.ts:3914:17)
+#     at async pipe.req.req (node_modules\next\src\server\base-server.ts:3818:25)
+#     at async DevServer.pipeImpl (node_modules\next\src\server\base-server.ts:1698:20)
+#     at async NextNodeServer.handleCatchallRenderRequest (node_modules\next\src\server\next-server.ts:1052:8)
+#     at async DevServer.handleRequestImpl (node_modules\next\src\server\base-server.ts:1462:8)
+#     at async (node_modules\next\src\server\dev\next-dev-server.ts:514:13)
+#     at async Span.traceAsyncFn (node_modules\next\src\trace\trace.ts:143:13)
+#     at async DevServer.handleRequest (node_modules\next\src\server\dev\next-dev-server.ts:512:19)
+#     at async invokeRender (node_modules\next\src\server\lib\router-server.ts:284:10)
+#     at async handleRequest (node_modules\next\src\server\lib\router-server.ts:530:15)
+#     at async requestHandlerImpl (node_modules\next\src\server\lib\router-server.ts:576:6)
+#     at async Server.requestListener (node_modules\next\src\server\lib\start-server.ts:146:6) {
+#   code: 'MODULE_NOT_FOUND'
+# }
+#  ⨯ ./node_modules/next/dist/esm/build/templates/pages.js:3:1
+# Module not found: Can't resolve 'next/dist/esm/build/templates/helpers'
+# failed to analyse ecmascript module '[project]/node_modules/next/dist/esm/build/templates/helpers.js [ssr] (ecmascript)'
+
+# Caused by:
+# - failed to parse [project]/node_modules/next/dist/esm/build/templates/helpers.js
+# - Transforming and/or parsing of [project]/node_modules/next/dist/esm/build/templates/helpers.js failed
+# - failed to run Wasm plugin transform. Please ensure the version of `swc_core` used by the plugin is compatible with the host runtime. See the documentation for compatibility information. If you are an author of the plugin, please update `swc_core` to the compatible version.
+# - RuntimeError: out of bounds memory access
+
+# Debug info:
+# - Execution of <ModuleAssetContext as AssetContext>::process_resolve_result failed
+# - Execution of apply_module_type failed
+# - Execution of *EcmascriptExports::needs_facade failed
+# - Execution of <EcmascriptModuleAsset as EcmascriptChunkPlaceable>::get_exports failed
+# - Execution of analyse_ecmascript_module failed
+# - failed to analyse ecmascript module '[project]/node_modules/next/dist/esm/build/templates/helpers.js [ssr] (ecmascript)'
+# - Execution of <EcmascriptModuleAsset as EcmascriptParsable>::failsafe_parse failed
+# - Execution of parse failed
+# - failed to parse [project]/node_modules/next/dist/esm/build/templates/helpers.js
+# - Transforming and/or parsing of [project]/node_modules/next/dist/esm/build/templates/helpers.js failed
+# - failed to run Wasm plugin transform. Please ensure the version of `swc_core` used by the plugin is compatible with the host runtime. See the documentation for compatibility information. If you are an author of the plugin, please update `swc_core` to the compatible version.
+
+#                   Note that if you want to use the os features like filesystem, you need to use `wasi`. Wasm itself does not have concept of filesystem.
+
+#                   https://swc.rs/docs/plugin/selecting-swc-core
+
+#                   See https://plugins.swc.rs/versions/from-plugin-runner/4.0.0 for the list of the compatible versions.
+
+#                   Build info:
+#                       Date: 2024-11-07
+#                       Timestamp: 2024-11-07T09:55:40.203904400Z
+
+#                   Version info:
+#                       swc_plugin_runner: 4.0.0
+#                       Dependencies: anyhow 1.0.93,codspeed-criterion-compat 2.7.2,criterion 0.5.1,enumset 1.1.5,futures 0.3.31,once_cell 1.20.2,parking_lot 0.12.3,serde 1.0.214,serde_json 1.0.132,swc_atoms 2.0.0,swc_common 4.0.0,swc_css_ast 4.0.1,swc_css_parser 4.0.0,swc_ecma_ast 4.0.1,swc_ecma_loader 4.0.0,swc_ecma_parser 5.0.0,swc_ecma_visit 4.0.0,swc_malloc 1.0.0,swc_plugin_proxy 4.0.0,testing 4.0.0,tokio 1.41.0,tracing 0.1.40,vergen 9.0.1,virtual-fs 0.16.0,wasmer 4.3.7,wasmer-cache 4.3.7,wasmer-compiler-cranelift 4.3.7,wasmer-wasix 0.27.0
+
+# - RuntimeError: out of bounds memory access
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x41293)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x412d6)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x412d6)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_common::plugin::serialized::_::<impl rkyv::Deserialize<swc_common::plugin::serialized::VersionedSerializable<T>,__D> for <swc_common::plugin::serialized::VersionedSerializable<T> as rkyv::Archive>::Archived>::deserialize::hf9f5382e5cfe68e1 (fluentui_next_appdir_directive.wasm[1034]:0x1415b6)
+#       at swc_common::plugin::serialized::PluginSerializedBytes::deserialize::h1117c4582490e330 (fluentui_next_appdir_directive.wasm[1035]:0x1417db)
+#       at __transform_plugin_process_impl (fluentui_next_appdir_directive.wasm[900]:0x130928)
+#       at __transform_plugin_process_impl.command_export (fluentui_next_appdir_directive.wasm[1960]:0x1ba3df)
+# Import map: aliased to module "next" with subpath "/dist/esm/build/templates/helpers" inside of [project]/
+
+
+# https://nextjs.org/docs/messages/module-not-found
+
+
+#  ⨯ ./node_modules/next/dist/esm/build/templates/pages.js:3:1
+# Module not found: Can't resolve 'next/dist/esm/build/templates/helpers'
+# failed to analyse ecmascript module '[project]/node_modules/next/dist/esm/build/templates/helpers.js [ssr] (ecmascript)'
+
+# Caused by:
+# - failed to parse [project]/node_modules/next/dist/esm/build/templates/helpers.js
+# - Transforming and/or parsing of [project]/node_modules/next/dist/esm/build/templates/helpers.js failed
+# - failed to run Wasm plugin transform. Please ensure the version of `swc_core` used by the plugin is compatible with the host runtime. See the documentation for compatibility information. If you are an author of the plugin, please update `swc_core` to the compatible version.
+# - RuntimeError: out of bounds memory access
+
+# Debug info:
+# - Execution of <ModuleAssetContext as AssetContext>::process_resolve_result failed
+# - Execution of apply_module_type failed
+# - Execution of *EcmascriptExports::needs_facade failed
+# - Execution of <EcmascriptModuleAsset as EcmascriptChunkPlaceable>::get_exports failed
+# - Execution of analyse_ecmascript_module failed
+# - failed to analyse ecmascript module '[project]/node_modules/next/dist/esm/build/templates/helpers.js [ssr] (ecmascript)'
+# - Execution of <EcmascriptModuleAsset as EcmascriptParsable>::failsafe_parse failed
+# - Execution of parse failed
+# - failed to parse [project]/node_modules/next/dist/esm/build/templates/helpers.js
+# - Transforming and/or parsing of [project]/node_modules/next/dist/esm/build/templates/helpers.js failed
+# - failed to run Wasm plugin transform. Please ensure the version of `swc_core` used by the plugin is compatible with the host runtime. See the documentation for compatibility information. If you are an author of the plugin, please update `swc_core` to the compatible version.
+
+#                   Note that if you want to use the os features like filesystem, you need to use `wasi`. Wasm itself does not have concept of filesystem.
+
+#                   https://swc.rs/docs/plugin/selecting-swc-core
+
+#                   See https://plugins.swc.rs/versions/from-plugin-runner/4.0.0 for the list of the compatible versions.
+
+#                   Build info:
+#                       Date: 2024-11-07
+#                       Timestamp: 2024-11-07T09:55:40.203904400Z
+
+#                   Version info:
+#                       swc_plugin_runner: 4.0.0
+#                       Dependencies: anyhow 1.0.93,codspeed-criterion-compat 2.7.2,criterion 0.5.1,enumset 1.1.5,futures 0.3.31,once_cell 1.20.2,parking_lot 0.12.3,serde 1.0.214,serde_json 1.0.132,swc_atoms 2.0.0,swc_common 4.0.0,swc_css_ast 4.0.1,swc_css_parser 4.0.0,swc_ecma_ast 4.0.1,swc_ecma_loader 4.0.0,swc_ecma_parser 5.0.0,swc_ecma_visit 4.0.0,swc_malloc 1.0.0,swc_plugin_proxy 4.0.0,testing 4.0.0,tokio 1.41.0,tracing 0.1.40,vergen 9.0.1,virtual-fs 0.16.0,wasmer 4.3.7,wasmer-cache 4.3.7,wasmer-compiler-cranelift 4.3.7,wasmer-wasix 0.27.0
+
+# - RuntimeError: out of bounds memory access
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x41293)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x412d6)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_ecma_ast::stmt::_::<impl rkyv::Deserialize<swc_ecma_ast::stmt::Stmt,__D> for <swc_ecma_ast::stmt::Stmt as rkyv::Archive>::Archived>::deserialize::h2e0e7796dd00e450 (fluentui_next_appdir_directive.wasm[195]:0x412d6)
+#       at rkyv::impls::core::<impl rkyv::DeserializeUnsized<[U],D> for [T]>::deserialize_unsized::h9ba16d7e99f2ea24 (fluentui_next_appdir_directive.wasm[196]:0x43055)
+#       at swc_common::plugin::serialized::_::<impl rkyv::Deserialize<swc_common::plugin::serialized::VersionedSerializable<T>,__D> for <swc_common::plugin::serialized::VersionedSerializable<T> as rkyv::Archive>::Archived>::deserialize::hf9f5382e5cfe68e1 (fluentui_next_appdir_directive.wasm[1034]:0x1415b6)
+#       at swc_common::plugin::serialized::PluginSerializedBytes::deserialize::h1117c4582490e330 (fluentui_next_appdir_directive.wasm[1035]:0x1417db)
+#       at __transform_plugin_process_impl (fluentui_next_appdir_directive.wasm[900]:0x130928)
+#       at __transform_plugin_process_impl.command_export (fluentui_next_appdir_directive.wasm[1960]:0x1ba3df)
+# Import map: aliased to module "next" with subpath "/dist/esm/build/templates/helpers" inside of [project]/
+
+
+# https://nextjs.org/docs/messages/module-not-found
+
+
+#  GET / 500 in 2423ms
+# thread '<unnamed>' panicked at /home/estebanmu-dev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rkyv-0.7.44/src/impls/core/mod.rs:266:67:
+# called `Result::unwrap()` on an `Err` value: LayoutError
+# note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+#  ✓ Compiled /favicon.ico in 6ms
+```
